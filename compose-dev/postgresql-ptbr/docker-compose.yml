@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgresql-ptbr
+    build: 
+      context: "../../dockerfiles"
+      dockerfile: postgresql-ptbr
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5434:5432"
+    # volumes:
+    #   - ./data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+  
+  pgadmin:
+    container_name: pgadmin-ptbr
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+    ports:
+      - "16544:80"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
